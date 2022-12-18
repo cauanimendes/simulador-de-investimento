@@ -1,0 +1,238 @@
+using System;
+using System.Net.Http.Headers;
+
+namespace AppInvestimento
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string nome;
+            string sexo;
+            string sexoCompleto;
+            string idade;
+            string acoes;
+            string rendaMensal;
+            string perfilInvestidor;
+            string quantidadeDeAcoes;
+            string tipoProduto;
+            string capital;
+            string tempoInvestimento;
+            int retornoTempoInvestimento = 0;
+            string retornoTipoRenda;
+            //float jurosConvertido;
+            int juros = 0;
+            //float m; //valor final
+            float j; //soma dos juros
+            int c; //capital
+            int i; //taxa de juros
+            int t; //tempo da aplicação
+
+            int ultraconservadorPerfil = 0;
+            int conservadorPerfil = 0;
+            int dinâmicoPerfil = 0 ;
+            int arrojadoPerfil = 0 ;
+
+            int ultraconservadorTipo = 0;
+            int conservadorTipo = 0;
+            int dinâmicoTipo = 0;
+            int arrojadoTipo = 0;
+
+            float resultadoPerfilInvestidorUltraconservador;
+            float resultadoPerfilInvestidorConservador;
+            float resultadoPerfilInvestidorDinâmico;
+            float resultadoPerfilInvestidorArrojado;
+
+
+            Console.WriteLine("Informe seu nome: ");
+            nome = Console.ReadLine();
+
+            Console.WriteLine("Informe seu sexo: ");
+            Console.WriteLine("1 - Feminino");
+            Console.WriteLine("2 - Masculino");
+            sexo = Console.ReadLine();
+
+            if (sexo == "1")
+            {
+                sexoCompleto = "Feminino";
+            }
+            else
+            {
+                sexoCompleto = "Masculino";
+            }
+
+            Console.WriteLine("Informe sua idade: ");
+            idade = Console.ReadLine();
+
+            Console.WriteLine("Informe sua renda mensal: ");
+            rendaMensal = Console.ReadLine();
+
+            Console.WriteLine("Você tem formação na área financeira?");
+            Console.WriteLine("1 - Sim, sem experiência"); //10% conservador, 90% dinâmico
+            Console.WriteLine("2 - Sim, com experiência"); //35% dinâmico, 65% arrojado
+            Console.WriteLine("3 - Não, mas tenho experiência"); //77% dinâmico, 23% arrojado
+            Console.WriteLine("4 - Não, com pouco experiência"); // 64% conservador, 36% dinâmico
+            Console.WriteLine("5 - Não, e não tenho experiência"); //75% ultraconservador, 25% conservador
+            perfilInvestidor = Console.ReadLine();
+
+            if (perfilInvestidor == "1")
+            {
+                conservadorPerfil = 10;
+                dinâmicoPerfil = 90;
+            }
+            else if (perfilInvestidor == "2")
+            {
+                dinâmicoPerfil = 35;
+                arrojadoPerfil = 65;
+            }
+            else if (perfilInvestidor == "3")
+            {
+                dinâmicoPerfil = 77;
+                arrojadoPerfil = 23;
+            }
+            else if (perfilInvestidor == "4")
+            {
+                conservadorPerfil = 64;
+                dinâmicoPerfil = 36;
+            }
+            else if (perfilInvestidor == "5")
+            {
+                ultraconservadorPerfil = 75;
+                conservadorPerfil = 25;
+            }
+
+
+            Console.WriteLine("Qual produto você conhece?");
+            Console.WriteLine("1 - Poupança, depósito a prazo"); //60% ultraconservador, 40% conservador
+            Console.WriteLine("2 - Tesouro Direto, renda variável"); //40% dinâmico, 60% arrojado
+            Console.WriteLine("3 - Produtos 1 e 2"); //22% dinâmico, 78% arrojado
+            Console.WriteLine("4 - Nunca investi, mas conheço alguns produtos"); //73% conservador, 27% dinâmico
+            Console.WriteLine("5 - Nunca investi e não conheço nenhum produto"); //60% ultraconservador, 40% conservador
+            tipoProduto = Console.ReadLine();
+
+            if (tipoProduto == "1")
+            {
+                ultraconservadorTipo = 60;
+                conservadorTipo = 40;
+            }
+            else if (tipoProduto == "2")
+            {
+                dinâmicoTipo = 40;
+                arrojadoTipo = 60;
+            }
+            else if (tipoProduto == "3")
+            {
+                dinâmicoTipo = 22;
+                arrojadoTipo = 78;
+            }
+            else if (tipoProduto == "4")
+            {
+                conservadorTipo = 73;
+                dinâmicoTipo = 27;
+            }
+            else if (tipoProduto == "5")
+            {
+                ultraconservadorTipo = 60;
+                conservadorTipo = 40;
+            }
+
+
+            resultadoPerfilInvestidorUltraconservador = (ultraconservadorPerfil + ultraconservadorTipo) / 2;
+            resultadoPerfilInvestidorConservador = (conservadorPerfil + conservadorTipo) / 2;
+            resultadoPerfilInvestidorDinâmico = (dinâmicoPerfil + dinâmicoTipo) / 2;
+            resultadoPerfilInvestidorArrojado = (arrojadoPerfil + arrojadoTipo) / 2;
+
+            Console.WriteLine("ResultadoUltraconservador " + resultadoPerfilInvestidorUltraconservador);
+            Console.WriteLine("ResultadoConservador " + resultadoPerfilInvestidorConservador);
+            Console.WriteLine("ResultadoDinamico " + resultadoPerfilInvestidorDinâmico);
+            Console.WriteLine("ResultadoArrojado " + resultadoPerfilInvestidorArrojado);
+
+            Console.WriteLine();
+
+
+            //Ultraconservador e conservador = Renda fixa
+            //Dinamico e Arrojado = renda variável
+
+            if(resultadoPerfilInvestidorConservador > resultadoPerfilInvestidorUltraconservador && resultadoPerfilInvestidorConservador > resultadoPerfilInvestidorDinâmico && resultadoPerfilInvestidorConservador > resultadoPerfilInvestidorArrojado)
+            {
+                Console.WriteLine("O perfil de investidor é Conservador");
+                Console.WriteLine("Sugestão de investimento: Renda Fixa");
+                retornoTipoRenda = "Renda Fixa";
+            }
+            else if(resultadoPerfilInvestidorUltraconservador > resultadoPerfilInvestidorConservador && resultadoPerfilInvestidorUltraconservador > resultadoPerfilInvestidorArrojado && resultadoPerfilInvestidorUltraconservador > resultadoPerfilInvestidorDinâmico)
+            {
+                Console.WriteLine("O perfil de investidor é Ultraconservador");
+                Console.WriteLine("Sugestão de investimento: Renda Fixa");
+                retornoTipoRenda = "Renda Fixa";
+            }
+            else if(resultadoPerfilInvestidorDinâmico > resultadoPerfilInvestidorArrojado && resultadoPerfilInvestidorDinâmico > resultadoPerfilInvestidorConservador && resultadoPerfilInvestidorDinâmico > resultadoPerfilInvestidorUltraconservador)
+            {
+                Console.WriteLine("O perfil de investidor é Dinâmico");
+                Console.WriteLine("Sugestão de investimento: Renda Variável");
+                retornoTipoRenda = "Renda Variável";
+            }
+            else
+            {
+                Console.WriteLine("O perfil do investidor é Arrojado");
+                Console.WriteLine("Sugestão de investimento: Renda Variável");
+                retornoTipoRenda = "Renda Variável";
+            }
+
+            Console.WriteLine("Informe o valor que irá investir: ");
+            capital = Console.ReadLine();
+
+            int capitalConvertido = Int32.Parse(capital);
+
+            Console.WriteLine("Deseja investir por quanto tempo?: ");
+            Console.WriteLine("1 - 12 meses");
+            Console.WriteLine("2 - 16 meses");
+            Console.WriteLine("3 - 20 meses");
+            Console.WriteLine("4 - 24 meses");
+            tempoInvestimento = Console.ReadLine();
+
+            if (tempoInvestimento == "1")
+            {
+                retornoTempoInvestimento = 12;
+            }
+            else if(tempoInvestimento == "2")
+            {
+                retornoTempoInvestimento = 16;
+            }
+            else if(tempoInvestimento == "3")
+            {
+                retornoTempoInvestimento = 20;
+            }
+            else
+            {
+                retornoTempoInvestimento = 24;
+            }
+
+            Console.WriteLine("Sugerimos que você pesquise os juros atual da taxa Poupança e taxa SELIC");
+            juros = 13;
+            //float jurosConvertido = float.Parse(juros);
+            Console.WriteLine(juros);
+            Console.WriteLine();
+
+            if (retornoTipoRenda == "Renda Fixa")
+            {
+                j = capitalConvertido * juros * retornoTempoInvestimento;
+                double m = capitalConvertido * (1 + juros) ^ retornoTempoInvestimento;
+                Console.WriteLine("J " + j);
+                Console.WriteLine("M " + m);
+            }
+
+            Console.WriteLine("Quais ações você deseja comprar?: ");
+            Console.WriteLine("1 - VALE ON NM - R$84.84");
+            Console.WriteLine("2 - PETROBRAS - R$25.35");
+            Console.WriteLine("3 - MAGAZ LUIZA ON NM - R$2.94");
+            Console.WriteLine("4 - PETRORIO ON NM - R$32.67");
+            Console.WriteLine("5 - ITAUUNIBANCO EJ N1 - R$25.96");
+            acoes = Console.ReadLine();
+
+            Console.WriteLine("Qual a quantidade de ações que deseja comprar?: ");
+            quantidadeDeAcoes = Console.ReadLine(); 
+
+            
+        }
+    }
+}
